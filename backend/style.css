@@ -98,7 +98,6 @@ header.landing .intro p {
   color: #0d0d0d;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 #contact-form button:hover {
