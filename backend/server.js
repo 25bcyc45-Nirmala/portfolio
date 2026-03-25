@@ -86,5 +86,20 @@ app.post("/contact", async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
+// DEBUG: Check Supabase connection and permissions (non-destructive)
+app.get("/api/debug", async (req, res) => {
+  try {
+    const { data, error } = await supabase.from("messages").select("id").limit(1);
+    if (error) {
+      console.error("DEBUG Supabase error:", error);
+      return res.status(200).json({ success: false, error });
+    }
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error("DEBUG unexpected error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 // Start server ✅ ← Add it **here, at the very bottom**
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
