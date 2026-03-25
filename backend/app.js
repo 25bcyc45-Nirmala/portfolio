@@ -56,6 +56,9 @@ function drawMatrix() {
 setInterval(drawMatrix, 33);
 
 // Contact form submission
+const API_BASE_URL = window.API_BASE_URL || window.location.origin;
+
+document.getElementById("contact-form").addEventListener("submit", async (e) => {
 document.getElementById("contact-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -66,11 +69,11 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
   };
 
   try {
-    const res = await fetch("http://localhost:5000/contact", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data)
-});
+    const res = await fetch(`${API_BASE_URL}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
     const result = await res.json();
 
@@ -78,10 +81,10 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
       alert("✅ Message Sent Successfully!");
       document.getElementById("contact-form").reset();
     } else {
-      alert("❌ Failed to send. Check backend or RLS policy.");
+      alert("❌ Failed to send. Check backend or policy.");
     }
   } catch (err) {
-    alert("⚠️ Backend not running or wrong URL");
+    alert("⚠️ Unable to reach backend at API_BASE_URL");
     console.error(err);
   }
 });
