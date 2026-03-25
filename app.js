@@ -13,6 +13,9 @@ typingEffect();
 
 // Scroll animation for cards
 const cards = document.querySelectorAll(".card");
+const formInputs = document.querySelectorAll("#contact-form input, #contact-form textarea");
+const formButton = document.querySelector("#contact-form button");
+
 window.addEventListener("scroll", () => {
   cards.forEach(card => {
     const top = card.getBoundingClientRect().top;
@@ -21,6 +24,26 @@ window.addEventListener("scroll", () => {
       card.style.transform = "translateY(0)";
     }
   });
+
+  // Animate form inputs
+  formInputs.forEach((input, index) => {
+    const top = input.getBoundingClientRect().top;
+    if (top < window.innerHeight - 50) {
+      setTimeout(() => {
+        input.classList.add("visible");
+      }, index * 100);
+    }
+  });
+
+  // Animate form button
+  if (formButton) {
+    const top = formButton.getBoundingClientRect().top;
+    if (top < window.innerHeight - 50) {
+      setTimeout(() => {
+        formButton.classList.add("visible");
+      }, formInputs.length * 100);
+    }
+  }
 });
 
 // Matrix rain effect
