@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
+require("dotenv").config();
 
 // Initialize Express app
 const app = express();
@@ -10,10 +11,11 @@ const PORT = 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-// Supabase client (replace with your own keys)
+
+// Supabase client
 const supabase = createClient(
-  "https://jdboduuamelrvjelrqrg.supabase.co", // your Supabase URL
-  "sb_publishable_5wyLcRU0X8PeEvhxW2Q6Pg_L9iC2Lkf" // your Supabase anon/public key
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
 );
 // Test route
 app.get("/", (req, res) => {
