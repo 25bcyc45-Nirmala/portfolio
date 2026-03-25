@@ -25,8 +25,6 @@ window.addEventListener("scroll", () => {
 });
 
 // Contact form submission
-const API_BASE_URL = window.API_BASE_URL || window.location.origin;
-
 document.getElementById("contact-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -37,7 +35,7 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
   };
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/contact`, {
+    const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
