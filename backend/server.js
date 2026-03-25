@@ -17,6 +17,9 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
+
+console.log("Supabase URL:", process.env.SUPABASE_URL ? "✅ Set" : "❌ Missing");
+console.log("Supabase Key:", process.env.SUPABASE_ANON_KEY ? "✅ Set" : "❌ Missing");
 // Test route
 app.get("/", (req, res) => {
   res.send("Server is working ✅");
@@ -26,17 +29,30 @@ app.get("/", (req, res) => {
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
+  console.log("📝 Received contact form:", { name, email, message });
+
+  // Check if Supabase is configured
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    console.error("❌ Supabase credentials missing!");
+    return res.status(500).json({ success: false, error: "Server misconfigured" });
+  }
+
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("messages")
-      .insert([{ name, email, message }]);
+      .insert([{ name, email, message }])
+      .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error("❌ Supabase error:", error);
+      throw error;
+    }
 
+    console.log("✅ Message saved:", data);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    console.error("❌ Error saving message:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -44,17 +60,30 @@ app.post("/api/contact", async (req, res) => {
 app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
+  console.log("📝 Received contact form:", { name, email, message });
+
+  // Check if Supabase is configured
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    console.error("❌ Supabase credentials missing!");
+    return res.status(500).json({ success: false, error: "Server misconfigured" });
+  }
+
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("messages")
-      .insert([{ name, email, message }]);
+      .insert([{ name, email, message }])
+      .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error("❌ Supabase error:", error);
+      throw error;
+    }
 
+    console.log("✅ Message saved:", data);
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    console.error("❌ Error saving message:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 // Start server ✅ ← Add it **here, at the very bottom**
