@@ -21,18 +21,26 @@ const supabase = createClient(
 app.get("/", (req, res) => {
   res.send("Server is working ✅");
 }); 
- // GET all messages
-app.get("/messages", async (req, res) => {
+
+// POST /api/contact → Save a message
+app.post("/api/contact", async (req, res) => {
+  const { name, email, message } = req.body;
+
   try {
-    const { data, error } = await supabase.from("messages").select("*");
+    const { error } = await supabase
+      .from("messages")
+      .insert([{ name, email, message }]);
+
     if (error) throw error;
-    res.json(data);
+
+    res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, data: [] });
+    res.status(500).json({ success: false });
   }
 });
-// POST /contact → Save a message
+
+// POST /contact → Save a message (backward compatibility)
 app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
